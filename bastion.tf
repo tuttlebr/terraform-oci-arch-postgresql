@@ -1,5 +1,4 @@
-## Copyright (c) 2022 Oracle and/or its affiliates.
-## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 
 data "oci_computeinstanceagent_instance_agent_plugins" "postgresql_master_agent_plugin_bastion" {
   count            = var.create_in_private_subnet ? 1 : 0
