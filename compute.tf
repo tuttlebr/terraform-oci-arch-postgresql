@@ -45,7 +45,7 @@ resource "oci_core_instance" "postgresql_master" {
     }
   }
 
-  fault_domain = var.postgresql_master_fd
+  # fault_domain = var.postgresql_master_fd
 
   create_vnic_details {
     subnet_id        = !var.use_existing_vcn ? oci_core_subnet.postgresql_subnet[0].id : var.postgresql_subnet
@@ -113,7 +113,7 @@ resource "oci_core_instance" "postgresql_hotstandby1" {
   }
 
 
-  fault_domain = var.postgresql_hotstandby1_fd
+  # fault_domain = var.postgresql_hotstandby1_fd
 
   create_vnic_details {
     subnet_id        = !var.use_existing_vcn ? oci_core_subnet.postgresql_subnet[0].id : var.postgresql_subnet
@@ -181,7 +181,7 @@ resource "oci_core_instance" "postgresql_hotstandby2" {
     }
   }
 
-  fault_domain = var.postgresql_hotstandby2_fd
+  # fault_domain = var.postgresql_hotstandby2_fd
 
   create_vnic_details {
     subnet_id        = !var.use_existing_vcn ? oci_core_subnet.postgresql_subnet[0].id : var.postgresql_subnet
