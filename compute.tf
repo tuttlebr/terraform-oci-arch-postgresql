@@ -60,7 +60,7 @@ resource "oci_core_instance" "postgresql_master" {
   }
 
   metadata = {
-    ssh_authorized_keys = tls_private_key.public_private_key_pair.public_key_openssh
+    ssh_authorized_keys = var.ssh_public_key
     user_data           = data.template_cloudinit_config.cloud_init.rendered
   }
 
@@ -128,7 +128,7 @@ resource "oci_core_instance" "postgresql_hotstandby1" {
   }
 
   metadata = {
-    ssh_authorized_keys = tls_private_key.public_private_key_pair.public_key_openssh
+    ssh_authorized_keys = var.ssh_public_key
     user_data           = data.template_cloudinit_config.cloud_init.rendered
   }
 
@@ -196,7 +196,7 @@ resource "oci_core_instance" "postgresql_hotstandby2" {
   }
 
   metadata = {
-    ssh_authorized_keys = tls_private_key.public_private_key_pair.public_key_openssh
+    ssh_authorized_keys = var.ssh_public_key
     user_data           = data.template_cloudinit_config.cloud_init.rendered
   }
 
