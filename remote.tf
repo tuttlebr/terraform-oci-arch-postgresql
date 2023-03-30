@@ -86,22 +86,22 @@ resource "null_resource" "postgresql_master_attach_volume" {
   count      = var.add_iscsi_volume ? 1 : 0
   depends_on = [oci_core_instance.postgresql_master, oci_core_volume.postgresql_master_volume, oci_core_volume_attachment.postgresql_master_volume_attachment]
 
-  provisioner "remote-exec" {
-    connection {
-      type                = "ssh"
-      user                = "opc"
-      host                = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address : data.oci_core_vnic.postgresql_master_primaryvnic.public_ip_address
-      private_key         = tls_private_key.public_private_key_pair.private_key_pem
-      script_path         = "/home/opc/myssh.sh"
-      agent               = false
-      timeout             = "10m"
-      bastion_host        = var.create_in_private_subnet ? "host.bastion.${var.region}.oci.oraclecloud.com" : null
-      bastion_port        = var.create_in_private_subnet ? "22" : null
-      bastion_user        = var.create_in_private_subnet ? oci_bastion_session.ssh_postgresql_master_session[0].id : null
-      bastion_private_key = var.create_in_private_subnet ? tls_private_key.public_private_key_pair.private_key_pem : null
-    }
-    inline = ["sudo /bin/su -c \"rm -rf /home/opc/iscsiattach.sh\""]
-  }
+  # provisioner "remote-exec" {
+  #   connection {
+  #     type                = "ssh"
+  #     user                = "opc"
+  #     host                = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address : data.oci_core_vnic.postgresql_master_primaryvnic.public_ip_address
+  #     private_key         = tls_private_key.public_private_key_pair.private_key_pem
+  #     script_path         = "/home/opc/myssh.sh"
+  #     agent               = false
+  #     timeout             = "10m"
+  #     bastion_host        = var.create_in_private_subnet ? "host.bastion.${var.region}.oci.oraclecloud.com" : null
+  #     bastion_port        = var.create_in_private_subnet ? "22" : null
+  #     bastion_user        = var.create_in_private_subnet ? oci_bastion_session.ssh_postgresql_master_session[0].id : null
+  #     bastion_private_key = var.create_in_private_subnet ? tls_private_key.public_private_key_pair.private_key_pem : null
+  #   }
+  #   inline = ["sudo /bin/su -c \"rm -rf /home/opc/iscsiattach.sh\""]
+  # }
 
   provisioner "file" {
     connection {
@@ -604,22 +604,22 @@ resource "null_resource" "postgresql_hotstandby1_attach_volume" {
   count      = (var.postgresql_deploy_hotstandby1 && var.add_iscsi_volume) ? 1 : 0
   depends_on = [oci_core_instance.postgresql_hotstandby1, oci_core_volume.postgresql_hotstandby1_volume, oci_core_volume_attachment.postgresql_hotstandby1_volume_attachment]
 
-  provisioner "remote-exec" {
-    connection {
-      type                = "ssh"
-      user                = "opc"
-      host                = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address : data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].public_ip_address
-      private_key         = tls_private_key.public_private_key_pair.private_key_pem
-      script_path         = "/home/opc/myssh.sh"
-      agent               = false
-      timeout             = "10m"
-      bastion_host        = var.create_in_private_subnet ? "host.bastion.${var.region}.oci.oraclecloud.com" : null
-      bastion_port        = var.create_in_private_subnet ? "22" : null
-      bastion_user        = var.create_in_private_subnet ? oci_bastion_session.ssh_postgresql_hotstandby1_session[count.index].id : null
-      bastion_private_key = var.create_in_private_subnet ? tls_private_key.public_private_key_pair.private_key_pem : null
-    }
-    inline = ["sudo /bin/su -c \"rm -rf /home/opc/iscsiattach.sh\""]
-  }
+  # provisioner "remote-exec" {
+  #   connection {
+  #     type                = "ssh"
+  #     user                = "opc"
+  #     host                = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address : data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].public_ip_address
+  #     private_key         = tls_private_key.public_private_key_pair.private_key_pem
+  #     script_path         = "/home/opc/myssh.sh"
+  #     agent               = false
+  #     timeout             = "10m"
+  #     bastion_host        = var.create_in_private_subnet ? "host.bastion.${var.region}.oci.oraclecloud.com" : null
+  #     bastion_port        = var.create_in_private_subnet ? "22" : null
+  #     bastion_user        = var.create_in_private_subnet ? oci_bastion_session.ssh_postgresql_hotstandby1_session[count.index].id : null
+  #     bastion_private_key = var.create_in_private_subnet ? tls_private_key.public_private_key_pair.private_key_pem : null
+  #   }
+  #   inline = ["sudo /bin/su -c \"rm -rf /home/opc/iscsiattach.sh\""]
+  # }
 
   provisioner "file" {
     connection {
@@ -758,22 +758,22 @@ resource "null_resource" "postgresql_hotstandby2_attach_volume" {
     postgresql_hotstandby2_id = oci_core_instance.postgresql_hotstandby2[0].id
   }
 
-  provisioner "remote-exec" {
-    connection {
-      type                = "ssh"
-      user                = "opc"
-      host                = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address : data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].public_ip_address
-      private_key         = tls_private_key.public_private_key_pair.private_key_pem
-      script_path         = "/home/opc/myssh.sh"
-      agent               = false
-      timeout             = "10m"
-      bastion_host        = var.create_in_private_subnet ? "host.bastion.${var.region}.oci.oraclecloud.com" : null
-      bastion_port        = var.create_in_private_subnet ? "22" : null
-      bastion_user        = var.create_in_private_subnet ? oci_bastion_session.ssh_postgresql_hotstandby2_session[count.index].id : null
-      bastion_private_key = var.create_in_private_subnet ? tls_private_key.public_private_key_pair.private_key_pem : null
-    }
-    inline = ["sudo /bin/su -c \"rm -rf /home/opc/iscsiattach.sh\""]
-  }
+  # provisioner "remote-exec" {
+  #   connection {
+  #     type                = "ssh"
+  #     user                = "opc"
+  #     host                = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address : data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].public_ip_address
+  #     private_key         = tls_private_key.public_private_key_pair.private_key_pem
+  #     script_path         = "/home/opc/myssh.sh"
+  #     agent               = false
+  #     timeout             = "10m"
+  #     bastion_host        = var.create_in_private_subnet ? "host.bastion.${var.region}.oci.oraclecloud.com" : null
+  #     bastion_port        = var.create_in_private_subnet ? "22" : null
+  #     bastion_user        = var.create_in_private_subnet ? oci_bastion_session.ssh_postgresql_hotstandby2_session[count.index].id : null
+  #     bastion_private_key = var.create_in_private_subnet ? tls_private_key.public_private_key_pair.private_key_pem : null
+  #   }
+  #   inline = ["sudo /bin/su -c \"rm -rf /home/opc/iscsiattach.sh\""]
+  # }
 
   count      = (var.postgresql_deploy_hotstandby2 && var.add_iscsi_volume) ? 1 : 0
   depends_on = [oci_core_instance.postgresql_hotstandby2, oci_core_volume.postgresql_hotstandby2_volume, oci_core_volume_attachment.postgresql_hotstandby2_volume_attachment]
